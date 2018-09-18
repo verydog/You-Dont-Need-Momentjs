@@ -72,47 +72,6 @@ npm install --save-dev eslint-plugin-you-dont-need-momentjs
 
 ## 使用对比
 
-**[解析](#parse)**
-
-1. [字符串+日期格式化](#string--date-format)
-1. [字符串+时间格式化](#string--time-format)
-1. [字符串+格式化+区域设置](#string--format--locale)
-
-**[取值 + 赋值](#get-set)**
-
-1. [Millisecond/Second/Minute/Hour](#millisecond--second--minute--hour)
-1. [Date of Month](#date-of-month)
-1. [Day of Week](#day-of-week)
-1. [Day of Year](#day-of-year)
-1. [Week of Year](#week-of-year)
-1. [Days in Month](#days-in-month)
-1. [Weeks in Year](#weeks-in-year)
-1. [Maximum of the given dates](#maximum-of-the-given-dates)
-1. [Minimum of the given dates](#minimum-of-the-given-dates)
-
-**[Manipulate](#manipulate)**
-
-1. [Add](#add)
-1. [Subtract](#subtract)
-1. [Start of Time](#start-of-time)
-1. [End of Time](#end-of-time)
-
-**[Display](#display)**
-
-1. [Format](#format)
-1. [Time from now](#time-from-now)
-1. [Time from X](#time-from-x)
-1. [Difference](#difference)
-
-**[Query](#query)**
-
-1. [Is Before](#is-before)
-1. [Is Same](#is-same)
-1. [Is After](#is-after)
-1. [Is Between](#is-between)
-1. [Is Leap Year](#is-leap-year)
-1. [Is a Date](#is-a-date)
-
 ⚠️_注意提供的date-fns示例适用于[v2]（https://date-fns.org/v2.0.0-alpha.16/docs/Getting-Started），该版本现已发布。 [请参阅v1 docs]（https://date-fns.org/docs/Getting-Started）了解当前版本._
 
 

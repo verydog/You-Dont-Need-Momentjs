@@ -1,52 +1,44 @@
-# You don't (may not) need Moment.js
+Moment.js是一个很棒的时间和日期库，具有许多牛X的方法，平时`npm install`了之后就是干，但是如果您的Web应用程序对性能上有很高的要求，可能会由于其复杂的API和大小会导致巨大的性能上的比不要的开销。
+![](https://user-gold-cdn.xitu.io/2018/9/18/165eab3aab9f7ed0?w=496&h=85&f=png&s=31449)
 
-[Moment.js](https://momentjs.com/) is a fantastic time & date library with lots of great features and utilities. However, if you are working on a performance sensitive web application, it might cause a huge performance overhead because of its complex APIs and large bundle size.
+## Moment存在的一些问题
+* 它高度基于OOP API，这使得它无法使用Webpack 2 新引入的`Tree-shaking`代码优化技术
+* 由于OOP API还有非纯函数，这会导致一些bug https://github.com/moment/moment/blob/develop/src/test/moment/add_subtract.js#L244-L286
+* 如果您没有使用时区，而只使用了moment.js中的一些简单函数，这会导致你的应用程序被引入了很多没使用的方法，这是极其浪费性能和内存的。 在这里推荐使用`dayjs`, `dayjs`有一个较小的核心，并且具有非常相似的API，因此很容易从moment平滑过渡到day.js。date-fns可以使用`Tree-shaking`代码优化技术和其他good api，因此它很适合与React，Sinon.js和webpack等好基友一起使用。
 
-![Large bundle size](./screenshot.png)
-
-Problems with Moment.js:
-
-- It is highly based on OOP APIs, which makes it fail to work with tree-shaking, thus leading to a huge bundle size and performance issues.
-- It is mutable due to OOP APIs and non-pure functions, which cause bugs:
-  https://github.com/moment/moment/blob/develop/src/test/moment/add_subtract.js#L244-L286
-
-If you are not using timezone but only a few simple functions from moment.js, this might bloat your app, and therefore is considered overkill. [dayjs](https://github.com/iamkun/dayjs) has a smaller core and has very similar APIs so it makes it very easy to migrate. [date-fns](https://github.com/date-fns/date-fns) enables [tree-shaking and other benefits](https://github.com/date-fns/date-fns/issues/275#issuecomment-264934189) so that it works great with React, Sinon.js, and webpack, etc. See https://github.com/moment/moment/issues/2373 for more ideas on why and how people switch from moment.js to other solutions.
-
-## Brief Comparison
-
-| Name                                     | Size(gzip)                        | Tree-shaking | Popularity | Methods richness | Pattern    | Timezone Support      | Locale |
+## 简单比较
+| 名字                                     | 大小(gzip)                        | 支持Tree-shaking | 名气 | api方法数 | 模式    | 时区支持      | 支持的语言数 |
 | ---------------------------------------- | --------------------------------- | ------------ | ---------- | ---------------- | ---------- | --------------------- | ------ |
-| [Moment.js](https://momentjs.com/)       | 329K(69.6K)                       | No           | 38k        | High             | OO         | Good(moment-timezone) | 123    |
-| [date-fns](https://date-fns.org)         | 78.4k(13.4k) without tree-shaking | Yes          | 13k        | High             | Functional | Not yet               | 32     |
-| [dayjs](https://github.com/iamkun/dayjs) | 6.5k(2.6k) without plugins        | No           | 14k        | Medium           | OO         | Not yet               | 23     |
+| [Moment.js](https://momentjs.com/)       | 329K(69.6K)                       | No           | 38k        | 高             | OO         | 非常好(moment-timezone) | 123    |
+| [date-fns](https://date-fns.org)         | 78.4k(13.4k) without tree-shaking | Yes          | 13k        | 高             | Functional | 还不支持               | 32     |
+| [dayjs](https://github.com/iamkun/dayjs) | 6.5k(2.6k) without plugins        | No           | 14k        | 中           | OO         | 还不支持               | 23     |
 
-## Voice of Developers
+## 程序员吐槽
 
-> [Removed moment.js to replace with date-fns - build output reduced by 40%](https://github.com/oysterprotocol/webnode/pull/116)
+> [把了moment.js换成了date-fns - 构建输出减少了40％](https://github.com/oysterprotocol/webnode/pull/116)
 
 > &mdash;<cite>Jared Farago from [webnode](https://github.com/oysterprotocol/webnode/pull/116) project.</cite>
 
-> [Make use of native JavaScript object and array utilities before going big.Good library if you’re looking to replace Moment.js for one reason or another. Immutable too.](https://twitter.com/dan_abramov/status/805030922785525760)
+> [请使用JavaScript原生时间对象和数组。 如果您因为某种原因想要用Moment.js，那么这是一个很好的库。 差不多。](https://twitter.com/dan_abramov/status/805030922785525760)
 
 > &mdash;<cite>Dan Abramov, Author of [Redux](https://github.com/reduxjs/redux) and co-author of [Create React App](https://github.com/facebook/create-react-app). Building tools for humans.</cite>
 
-> [I strongly recommend using date-fns over Moment.js, it's has a nicer API and you can include only parts you need!](https://twitter.com/silvenon/status/804946772690923520)
+> [我强烈建议在Moment.js上使用date-fns，它有一个更好的API，你只能包含你需要的部分！](https://twitter.com/silvenon/status/804946772690923520)
 
 > &mdash;<cite>Matija Marohnić, a design-savvy frontend developer from Croatia.</cite>
 
-> [Just yesterday changed momentjs to this lib in out project. Cut the size of our js bundle almost in half 😱](https://twitter.com/gribnoysup/status/805061630752997377)
+> [就在昨天，在项目中将momentjs换了，我们项目体积减少了很多😱](https://twitter.com/gribnoysup/status/805061630752997377)
 
 > &mdash;<cite>Sergey Petushkov, a javaScript developer from Moscow, Russia • Currently in Berlin, Germany.</cite>
 
-## ESLint Plugin
-
+## ESLint插件
 <p align="center">
   <a href="https://www.npmjs.com/package/eslint-plugin-you-dont-need-momentjs">
     <img src="https://img.shields.io/npm/v/eslint-plugin-you-dont-need-momentjs.svg?style=flat-square"
       alt="NPM Version">
   </a>
   <a href="https://www.npmjs.org/package/eslint-plugin-you-dont-need-momentjs">
-    <img src="http://img.shields.io/npm/dm/eslint-plugin-you-dont-need-momentjs.svg?style=flat-square?style=flat-square"
+    <img src="https://img.shields.io/npm/dm/eslint-plugin-you-dont-need-momentjs.svg?style=flat-square?style=flat-square"
       alt="Downloads">
   </a>
   <a href="https://travis-ci.org/you-dont-need/You-Dont-Need-Momentjs">
@@ -63,31 +55,30 @@ If you are not using timezone but only a few simple functions from moment.js, th
   </a>
 </p>
 
-If you're using [ESLint](http://eslint.org/), you can install a
-[plugin](http://eslint.org/docs/user-guide/configuring#using-the-configuration-from-a-plugin) that
-will help you identify places in your codebase where you don't (may not) need Moment.js.
+如果你正在使用 [ESLint](http://eslint.org/), 你可以安装一个插件
+[plugin](http://eslint.org/docs/user-guide/configuring#using-the-configuration-from-a-plugin) 来帮助你识别代码库中你没有（可能不需要）Moment.js的地方。
 
-Install the plugin...
+安装这个插件...
 
 ```sh
 npm install --save-dev eslint-plugin-you-dont-need-momentjs
 ```
 
-...then update your config
+...然后更新你的配置
 
 ```js
 "extends" : ["plugin:you-dont-need-momentjs/recommended"],
 ```
 
-## Quick Links
+## 使用对比
 
-**[Parse](#parse)**
+**[解析](#parse)**
 
-1. [String + Date Format](#string--date-format)
-1. [String + Time Format](#string--time-format)
-1. [String + Format + locale](#string--format--locale)
+1. [字符串+日期格式化](#string--date-format)
+1. [字符串+时间格式化](#string--time-format)
+1. [字符串+格式化+区域设置](#string--format--locale)
 
-**[Get + Set](#get-set)**
+**[取值 + 赋值](#get-set)**
 
 1. [Millisecond/Second/Minute/Hour](#millisecond--second--minute--hour)
 1. [Date of Month](#date-of-month)
@@ -122,13 +113,14 @@ npm install --save-dev eslint-plugin-you-dont-need-momentjs
 1. [Is Leap Year](#is-leap-year)
 1. [Is a Date](#is-a-date)
 
-⚠️ _Note that the provided examples of date-fns are for [v2](https://date-fns.org/v2.0.0-alpha.16/docs/Getting-Started) which is in pre-release right now. [See v1 docs](https://date-fns.org/docs/Getting-Started) for the current release._
+⚠️_注意提供的date-fns示例适用于[v2]（https://date-fns.org/v2.0.0-alpha.16/docs/Getting-Started），该版本现已发布。 [请参阅v1 docs]（https://date-fns.org/docs/Getting-Started）了解当前版本._
 
-## Parse
 
-### String + Date Format
+## 解析
 
-Return the date parsed from date string using the given format string.
+### 字符串+日期格式化
+
+返回从字符串中解析的日期.
 
 ```js
 // Moment.js
@@ -145,11 +137,13 @@ dayjs('12-25-1995');
 // => "1995-12-24T13:00:00.000Z"
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### String + Time Format
 
-Return the date parsed from time string using the given format string.
+
+### 字符串+时间格式化
+
+返回从字符串中解析的时间日期.
 
 ```js
 // Moment.js
@@ -161,14 +155,15 @@ import parse from 'date-fns/parse';
 parse('2010-10-20 4:30', 'yyyy-MM-dd H:mm', new Date());
 // => "2010-10-19T17:30:00.000Z"
 
-// dayjs ❌ does not support custom format parse
+// dayjs❌不支持自定义格式解析
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### String + Format + locale
 
-Return the date parsed from string using the given format string and locale.
+### 字符串+本地格式化  
+
+返回从字符串中解析的本地化时间日期.
 
 ```js
 // Moment.js
@@ -181,16 +176,15 @@ import fr from 'date-fns/locale/fr';
 parse('2012 mars', 'yyyy MMMM', new Date(), { locale: fr });
 // => "2012-02-29T13:00:00.000Z"
 
-// dayjs ❌ does not support custom format parse
+// dayjs❌不支持自定义格式解析
 ```
 
-**[⬆ back to top](#quick-links)**
 
-## Get + Set
+## 取值 + 赋值
 
-### Millisecond / Second / Minute / Hour
+### 毫秒/秒/分/时
 
-Get the `Millisecond/Second/Minute/Hour` of the given date.
+获取 `毫秒 / 秒 / 分 / 时`。
 
 ```js
 // Moment.js
@@ -199,7 +193,7 @@ moment().seconds();
 moment().hours();
 // => 19
 
-// Native
+// 原生
 new Date().getSeconds();
 // => 49
 new Date().getHours();
@@ -220,7 +214,7 @@ dayjs().hour();
 // => 19
 ```
 
-Set the `Millisecond/Second/Minute/Hour` of the given date.
+设置 `毫秒 / 秒 / 分 / 时`。
 
 ```js
 // Moment.js
@@ -229,7 +223,7 @@ moment().seconds(30);
 moment().hours(13);
 // => "2018-09-09T03:12:49.695Z"
 
-// Native
+// 原生
 new Date(new Date().setSeconds(30));
 // => "2018-09-09T09:12:30.695Z"
 new Date(new Date().setHours(13));
@@ -250,11 +244,13 @@ dayjs().set('hour', 13);
 // => "2018-09-09T03:12:49.695Z"
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### Date of Month
 
-Gets or sets the day of the month.
+
+### 月份日期
+
+设置&获取月份。
 
 ```js
 // Moment.js
@@ -263,7 +259,7 @@ moment().date();
 moment().date(4);
 // => "2018-09-04T09:12:49.695Z"
 
-// Native
+// 原生
 new Date().getDate();
 // => 9
 new Date().setDate(4);
@@ -281,14 +277,15 @@ setDate(new Date(), 4);
 dayjs().date();
 // => 9
 dayjs().set('date', 4);
-// => "2018-09-04T09:12:49.695Z"
+// => "2018-09-04T09:12:49.6
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### Day of Week
 
-Gets or sets the day of the week.
+### 星期几
+
+设置&获取星期。
 
 ```js
 // Moment.js
@@ -297,7 +294,7 @@ moment().day();
 moment().day(-14);
 // => "2018-08-26T09:12:49.695Z"
 
-// Native
+// 原生
 new Date().getDay();
 // => 0 (Sunday)
 new Date().setDate(new Date().getDate() - 14);
@@ -318,11 +315,13 @@ dayjs().set('day', -14);
 // => "2018-08-26T09:12:49.695Z"
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### Day of Year
 
-Gets or sets the day of the year.
+
+### 一年的某一天
+
+设置&获取一年的某一天。
 
 ```js
 // Moment.js
@@ -339,14 +338,14 @@ getDayOfYear(new Date());
 setDayOfYear(new Date(), 256);
 // => "2018-09-13T09:12:49.695Z"
 
-// dayjs ❌ does not support day of year
+// dayjs ❌  不支持
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
 
-### Week of Year
+### 一年的某一周
 
-Gets or sets the week of the year.
+设置&获取一年的某一周。
 
 ```js
 // Moment.js
@@ -368,14 +367,13 @@ import weekOfYear from 'dayjs/plugin/weekOfYear';
 dayjs.extend(weekOfYear);
 dayjs().week();
 // => 37
-// dayjs ❌ does not support set week of year
+// dayjs ❌  不支持
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
+### 某月有多少天
 
-### Days in Month
-
-Get the number of days in the current month.
+获取某月有多少天。
 
 ```js
 // Moment.js
@@ -391,12 +389,11 @@ getDaysInMonth(new Date(2012, 1));
 dayjs('2012-02').daysInMonth();
 // => 29
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
+### 一年有多少周
 
-### Weeks in Year
-
-Gets the number of weeks in the current year, according to ISO weeks.
+根据ISO周，获取当年的周数。
 
 ```js
 // Moment.js
@@ -410,12 +407,12 @@ getISOWeeksInYear(new Date());
 
 // dayjs ❌ does not support weeks in the year
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
 
-### Maximum of the given dates
+### 获取日期最大值
 
-Returns the maximum (most distant future) of the given date.
+返回给定日期的最大值。
 
 ```js
 const array = [
@@ -428,7 +425,7 @@ const array = [
 moment.max(array.map(a => moment(a)));
 // => "2018-03-11T13:00:00.000Z"
 
-// Native
+// 原生
 new Date(Math.max.apply(null, array)).toISOString();
 // => "2018-03-11T13:00:00.000Z"
 
@@ -437,14 +434,15 @@ import max from 'date-fns/max';
 max(array);
 // => "2018-03-11T13:00:00.000Z"
 
-// dayjs ❌ does not support the maximum of the given dates
+// dayjs ❌  不支持
 ```
 
-**[⬆ back to top](#quick-links)**
 
-### Minimum of the given dates
+<br>
 
-Returns the minimum (most distant future) of the given date.
+### 获取日期最小值
+
+返回给定日期的最小值。
 
 ```js
 const array = [
@@ -457,7 +455,7 @@ const array = [
 moment.min(array.map(a => moment(a)));
 // => "2016-01-08T13:00:00.000Z"
 
-// Native
+// 原生
 new Date(Math.min.apply(null, array)).toISOString();
 // => "2016-01-08T13:00:00.000Z"
 
@@ -466,16 +464,15 @@ import min from 'date-fns/min';
 min(array);
 // => "2016-01-08T13:00:00.000Z"
 
-// dayjs ❌ does not support the minimum of the given dates
+// dayjs ❌  不支持
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
+## 操作比较
 
-## Manipulate
+### 添加天数
 
-### Add
-
-Add the specified number of days to the given date.
+将指定的天数添加到给定日期。
 
 ```js
 // Moment.js
@@ -491,12 +488,13 @@ addDays(new Date(), 7);
 dayjs().add(7, 'day');
 // => "2018-09-16T09:12:49.695Z"
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
 
-### Subtract
 
-Subtract the specified number of days from the given date.
+### 减去天数
+
+从给定日期减去指定的天数。
 
 ```js
 // Moment.js
@@ -512,12 +510,13 @@ subDays(new Date(), 7);
 dayjs().subtract(7, 'day');
 // => "2018-09-02T09:12:49.695Z"
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
 
-### Start of Time
 
-Return the start of a unit of time for the given date.
+### 获月初时间
+
+获取这个月初时间。
 
 ```js
 // Moment.js
@@ -534,11 +533,12 @@ dayjs().startOf('month');
 // => "2018-08-31T14:00:00.000Z"
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### End of Time
 
-Return the end of a unit of time for the given date.
+### 获取今天结束的时间
+
+获取今天结束的时间。
 
 ```js
 // Moment.js
@@ -555,13 +555,15 @@ dayjs().endOf('day');
 // => "2018-09-09T13:59:59.999Z"
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-## Display
 
-### Format
 
-Return the formatted date string in the given format.
+## 显示
+
+### 格式化
+
+用给定的格式格式化给定的字符串。
 
 ```js
 // Moment.js
@@ -584,11 +586,14 @@ dayjs().format('ddd, hA');
 // => "Sun, 7PM"
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### Time from now
 
-Return time from now.
+
+
+### 获取到现在的年限
+
+获取到现在的年限
 
 ```js
 // Moment.js
@@ -605,14 +610,14 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
 dayjs(1536484369695).fromNow();
-// => "5 days ago" ⚠️  the rounding method of this plugin is different from moment.js and date-fns, use with care.
+// => "5 days ago" ⚠️  这个插件的舍入方法与moment.js和date-fns不同，请谨慎使用。
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### Time from x
+### 时差
 
-Return time from x.
+返回两个时间点的时差。
 
 ```js
 // Moment.js
@@ -624,18 +629,17 @@ import formatDistance from 'date-fns/formatDistance';
 formatDistance(new Date(2007, 0, 27), new Date(2007, 0, 29));
 // => "2 days"
 
-// dayjs ⚠️ requires relativeTime plugin
+// dayjs ⚠️ 需要relativeTime插件
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 dayjs('2007-01-27').to(dayjs('2007-01-29'));
 // => "in 2 days"
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
+### 时差（毫秒）
 
-### Difference
-
-Get the unit of time between the given dates.
+返回两个时间点的毫秒级时差。
 
 ```js
 // Moment.js
@@ -659,13 +663,14 @@ dayjs('2007-01-27').diff(dayjs('2007-01-29'), 'days');
 // => -2
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-## Query
 
-### Is Before
+## 查询
 
-Check if a date is before another date.
+### 是否之前
+
+检查日期是否在另一个日期之前。
 
 ```js
 // Moment.js
@@ -682,11 +687,12 @@ dayjs('2010-10-20').isBefore('2010-10-21');
 // => true
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### Is Same
 
-Check if a date is same another date.
+### 是否一样
+
+检查日期是否与另一个日期相同。
 
 ```js
 // Moment.js
@@ -712,14 +718,13 @@ dayjs('2010-10-20').isSame('2010-10-21');
 // => false
 dayjs('2010-10-20').isSame('2010-10-20');
 // => true
-// dayjs ❌ does not support is same month
+// dayjs ❌  不支持
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
+### 是否之后
 
-### Is After
-
-Check if a date is after another date.
+检查日期是否在另一个日期之后。
 
 ```js
 // Moment.js
@@ -735,12 +740,12 @@ isAfter(new Date(2010, 9, 20), new Date(2010, 9, 19));
 dayjs('2010-10-20').isAfter('2010-10-19');
 // => true
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
 
-### Is Between
+### 是否在两个日期之前
 
-Check if a date is between two other dates.
+检查日期是否在两个其他日期之间。
 
 ```js
 // Moment.js
@@ -762,11 +767,11 @@ dayjs('2010-10-20').isBetween('2010-10-19', '2010-10-25');
 // => true
 ```
 
-**[⬆ back to top](#quick-links)**
+<br>
 
-### Is Leap Year
+### 是否是闰年
 
-Check if a year is a leap year.
+判断是否是润年。
 
 ```js
 // Moment.js
@@ -778,18 +783,17 @@ import isLeapYear from 'date-fns/isLeapYear';
 isLeapYear(new Date(2000, 0, 1));
 // => true
 
-// dayjs ⚠️ requires isLeapYear plugin
+// dayjs ⚠️ 要引入 isLeapYear 插件
 import isLeapYear from 'dayjs/plugin/isLeapYear';
 dayjs.extend(isLeapYear);
 dayjs('2000').isLeapYear();
 // => true
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
+### 是否是日期对象
 
-### Is a Date
-
-Check if a variable is a native js Date object.
+检查变量是否是js Date对象。
 
 ```js
 // Moment.js
@@ -801,11 +805,16 @@ import isDate from 'date-fns/isDate';
 isDate(new Date());
 // => true
 
-// dayjs ❌ does not support is date
+// dayjs ❌  不支持
 ```
+<br>
 
-**[⬆ back to top](#quick-links)**
+## 总结
+如果你只需要简单的操作那么`day.js`更适合你，如果复杂一点的项目那么`date-fns`看起来更合适。
 
-# License
-
-MIT
+## 关于
+本文由jon-millent译 
+* github https://github.com/Jon-Millent
+* blog http://chiyude.fan
+* 原文地址 https://github.com/you-dont-need/You-Dont-Need-Momentjs
+<img src="https://user-gold-cdn.xitu.io/2018/9/18/165eb22f112a51b3?w=2800&h=800&f=jpeg&s=149546">
